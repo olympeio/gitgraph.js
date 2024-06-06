@@ -1,6 +1,9 @@
+body {
+  background-color: #000;
+}
 #graph {
   margin: 20px;
-  border: 1px solid #ccc;
   width: 800px;
   height: 800px;
+  background-color: rgb(64, 64, 64);
 }

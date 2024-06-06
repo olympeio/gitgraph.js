@@ -8,7 +8,7 @@ export default templateExtend(TemplateName.Metro, {
     lineWidth: 2,
     spacing: 20,
     label: {
-      display: false,
+      display: true,
       color: "#ccc",
       font: "normal 10pt Roboto",
       bgColor: "#000",
@@ -26,7 +26,7 @@ export default templateExtend(TemplateName.Metro, {
       displayAuthor: false,
       displayBranch: false,
       displayHash: false,
-      color: "#000",
+      color: "#fff",
     },
   },
 });

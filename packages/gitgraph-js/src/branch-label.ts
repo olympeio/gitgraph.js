@@ -3,8 +3,8 @@ import { createG, createRect, createText } from "./svg-elements";
 
 export { createBranchLabel, PADDING_X, PADDING_Y };
 
-const PADDING_X = 10;
-const PADDING_Y = 5;
+const PADDING_X = 5;
+const PADDING_Y = 2;
 
 function createBranchLabel(branch: Branch, commit: Commit): SVGElement {
   const rect = createRect({
@@ -35,7 +35,7 @@ function createBranchLabel(branch: Branch, commit: Commit): SVGElement {
     // Ideally, it would be great to refactor these behavior into SVG elements.
     rect.setAttribute("width", boxWidth.toString());
     rect.setAttribute("height", boxHeight.toString());
-    text.setAttribute("y", (boxHeight / 2).toString());
+    text.setAttribute("y", (boxHeight / 2 - 1).toString());
   });
 
   observer.observe(branchLabel, {

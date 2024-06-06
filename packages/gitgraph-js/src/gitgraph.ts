@@ -166,9 +166,8 @@ function createGitgraph(
             10,
           );
 
-          const firstForeignObject = commit.getElementsByTagName(
-            "foreignObject",
-          )[0];
+          const firstForeignObject =
+            commit.getElementsByTagName("foreignObject")[0];
           const customHtmlMessage =
             firstForeignObject && firstForeignObject.firstElementChild;
 
@@ -190,7 +189,7 @@ function createGitgraph(
         return;
       }
 
-      const padding = 10;
+      const padding = 5;
 
       // Ensure commits elements (branch labels, message…) are well positionned.
       // It can't be done at render time since elements size is dynamic.
@@ -455,6 +454,7 @@ function createGitgraph(
       if (gitgraph.isVertical) {
         branchLabelContainer = createG({
           children: [branchLabel],
+          translate: { x: 0, y: -2 },
         });
       } else {
         const commitDotSize = commit.style.dot.size * 2;
