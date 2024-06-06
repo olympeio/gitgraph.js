@@ -81,6 +81,7 @@ function createGitgraph(
   let lastData: RenderedData<SVGElement>;
   let $commits: SVGElement;
   let commitMessagesX = 0;
+  let minXBranch = 0;
   let $tooltip: SVGElement | null = null;
 
   // Create an `svg` context in which we'll render the graph.
@@ -139,6 +140,15 @@ function createGitgraph(
       } else {
         positionCommitsElements();
         adaptGraphDimensions(adaptToContainer);
+        // Adjust the positioning of the graph to make space for the branch names on the left
+        if (svg.firstChild) {
+          svg.firstChild.setAttribute(
+            "transform",
+            `translate(${
+              BRANCH_LABEL_PADDING_X - minXBranch
+            }, ${TOOLTIP_PADDING})`,
+          );
+        }
       }
     });
 
@@ -200,14 +210,10 @@ function createGitgraph(
         let x = commitMessagesX;
 
         if (branchLabel) {
-          moveElement(branchLabel, x);
-
-          // BBox width misses box padding
-          // => they are set later, on branch label update.
-          // We would need to make branch label update happen before to solve it.
-          const branchLabelWidth =
-            branchLabel.getBBox().width + 2 * BRANCH_LABEL_PADDING_X;
-          x += branchLabelWidth + padding;
+          // Move the branch label on the left of the commit.
+          const xBranch = (branchLabel.getBBox().width + 3 * padding) * -1;
+          moveElement(branchLabel, xBranch);
+          minXBranch = Math.min(minXBranch, xBranch);
         }
 
         tags.forEach((tag) => {
