@@ -1,0 +1,41 @@
+{
+    "name": "@gitgraph/olympe-playground",
+    "version": "1.0.0",
+    "description": "Test GitGraph.js",
+    "author": "Benjamin Girardet <benjamin.girardet@olympe.io>",
+    "contributors": [],
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/@olympeio/gitgraph.js.git"
+    },
+    "bugs": {
+      "url": "https://github.com/@olympeio/gitgraph.js/issues"
+    },
+    "keywords": [
+      "git",
+      "graph",
+      "javascript"
+    ],
+    "type": "module",
+    "homepage": "https://olympe.io",
+    "publishConfig": {
+      "access": "public"
+    },
+    "main": "./index.js",
+    "scripts": {
+      "build": "node ./build/build.js",
+      "start": "node ./build/serve.js",
+      "analyze": "node ./build/analyze.js"
+    },
+    "dependencies": {
+      "@gitgraph/core": "1.5.0",
+      "tslib": "^2.6.3"
+    },
+    "devDependencies": {
+      "esbuild": "0.21.4",
+      "esbuild-plugin-tsc": "0.4.0",
+      "typescript": "^5.4.5"
+    }
+  }
+  

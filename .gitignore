@@ -149,6 +149,8 @@ Thumbs.db
 
 # compiled files
 lib
+bundle.js
+bundle.js.map
 
 # npm
 package-lock.json
