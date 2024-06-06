@@ -35,11 +35,8 @@ export type ILogGraph = (graph: GraphMap) => void;
 // Rendering is a bit different in CLI since we don't have pixels.
 // Thus, we should translate data to have "line-per-line" instructions.
 function computeGraphMap(gitgraph: GitgraphCore): GraphMap {
-  const {
-    branchesPaths,
-    commits,
-    commitMessagesX,
-  } = gitgraph.getRenderedData();
+  const { branchesPaths, commits, commitMessagesX } =
+    gitgraph.getRenderedData();
   const branchesColors = Array.from(branchesPaths).map(
     ([branch]) => branch.computedColor!,
   );
