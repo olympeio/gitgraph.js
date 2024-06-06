@@ -7,11 +7,17 @@ export { createTooltip, PADDING };
 const PADDING = 10;
 const OFFSET = 10;
 
-function createTooltip(commit: Commit): SVGElement {
+function createTooltip(
+  commit: Commit,
+  generateTooltipMessage?: (commit: Commit) => string,
+): SVGElement {
   const path = createPath({ d: "", fill: "#EEE" });
+  const content = generateTooltipMessage
+    ? generateTooltipMessage(commit)
+    : `${commit.hashAbbrev} - ${commit.subject}`;
   const text = createText({
     translate: { x: OFFSET + PADDING, y: 0 },
-    content: `${commit.hashAbbrev} - ${commit.subject}`,
+    content,
     fill: "#333",
   });
 

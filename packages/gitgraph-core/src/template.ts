@@ -190,7 +190,7 @@ interface CommitStyleBase {
   /**
    * Tooltips policy
    */
-  hasTooltipInCompactMode: boolean;
+  ignoreTooltip: boolean;
 }
 
 interface CommitStyle extends CommitStyleBase {
@@ -309,10 +309,7 @@ class Template {
     this.commit = {
       color: options.commit.color,
       spacing: numberOptionOr(options.commit.spacing, 25),
-      hasTooltipInCompactMode: booleanOptionOr(
-        options.commit.hasTooltipInCompactMode,
-        true,
-      ),
+      ignoreTooltip: booleanOptionOr(options.commit.ignoreTooltip, false),
       dot: {
         color: options.commit.dot.color || options.commit.color,
         size: options.commit.dot.size || 3,

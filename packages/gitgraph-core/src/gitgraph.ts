@@ -33,6 +33,7 @@ interface GitgraphOptions {
   commitMessage?: string;
   generateCommitHash?: () => Commit["hash"];
   compareBranchesOrder?: CompareBranchesOrder;
+  generateTooltipMessage?: (commit: Commit) => string;
 }
 
 interface RenderedData<TNode> {
