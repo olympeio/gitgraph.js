@@ -1,8 +1,8 @@
 import { createGitgraph, Mode } from "@gitgraph/js";
-console.log("hey2");
+import template from "./template";
 
 const graphContainer = document.querySelector("#graph");
-const gitgraph = createGitgraph(graphContainer, {});
+const gitgraph = createGitgraph(graphContainer, { template });
 const main = gitgraph.branch("main");
 main.commit("Initial commit");
 const develop = gitgraph.branch("develop");
@@ -26,6 +26,8 @@ feature.merge(develop);
 feature2.commit("Adjust feature 2");
 develop.merge(feature2);
 feature.commit("Adjust feature");
-feature.commit("Yet another change");
+feature.commit("Yet another change", {
+  renderTooltip: (x) => console.log("x", x),
+});
 develop.merge(feature);
 main.merge(develop);
