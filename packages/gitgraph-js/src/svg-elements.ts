@@ -105,6 +105,8 @@ interface TextOptions {
     y: number;
   };
   onClick?: () => void;
+  onMouseOver?: () => void;
+  onMouseOut?: () => void;
 }
 
 function createText(options: TextOptions): SVGTextElement {
@@ -132,6 +134,14 @@ function createText(options: TextOptions): SVGTextElement {
 
   if (options.onClick) {
     text.addEventListener("click", options.onClick);
+  }
+
+  if (options.onMouseOver) {
+    text.addEventListener("mouseover", options.onMouseOver);
+  }
+
+  if (options.onMouseOut) {
+    text.addEventListener("mouseout", options.onMouseOut);
   }
 
   return text;

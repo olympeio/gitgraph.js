@@ -10,7 +10,7 @@ export default templateExtend(TemplateName.Metro, {
     label: {
       display: true,
       color: "#ccc",
-      font: "normal 10pt Roboto",
+      font: "normal 12pt Roboto",
       bgColor: "#000",
       borderRadius: 5,
       strokeColor: "transparent",
@@ -22,7 +22,7 @@ export default templateExtend(TemplateName.Metro, {
       size: 5,
     },
     message: {
-      font: "normal 10pt Roboto",
+      font: "normal 12pt Roboto",
       displayAuthor: false,
       displayBranch: false,
       displayHash: false,

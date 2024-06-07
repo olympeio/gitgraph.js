@@ -1,4 +1,5 @@
 import { createGitgraph, Mode } from "@gitgraph/js";
+import { Commit } from "@gitgraph/core";
 import template from "./template";
 
 const graphContainer = document.querySelector("#graph");
@@ -8,6 +9,15 @@ const gitgraph = createGitgraph(graphContainer, {
   generateTooltipMessage: (commit) => {
     const branch = commit.branches[0];
     return (branch ? `${branch}: ` : "") + commit.subject;
+  },
+  onMessageOver: (commit) => {
+    const circle = document.querySelector(`[id="${commit.hash}"]`);
+    circle?.setAttribute("transform-origin", "5px 5px");
+    circle?.setAttribute("transform", "scale(1.5)");
+  },
+  onMessageOut: (commit) => {
+    const circle = document.querySelector(`[id="${commit.hash}"]`);
+    circle?.removeAttribute("transform");
   },
 });
 const main = gitgraph.branch("main");
@@ -40,6 +50,15 @@ develop.merge(feature2);
 feature.commit("Adjust feature");
 feature.commit({
   subject: "Yet another change",
+  onMessageOver: (commit: Commit) => {
+    const circle = document.querySelector(`[id="${commit.hash}"]`);
+    circle?.setAttribute("transform-origin", "5px 5px");
+    circle?.setAttribute("transform", "scale(1.5)");
+  },
+  onMessageOut: (commit: Commit) => {
+    const circle = document.querySelector(`[id="${commit.hash}"]`);
+    circle?.removeAttribute("transform");
+  },
 });
 develop.merge(feature);
 main.merge(develop);

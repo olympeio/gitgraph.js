@@ -142,7 +142,7 @@ function createGitgraph(
         adaptGraphDimensions(adaptToContainer);
         // Adjust the positioning of the graph to make space for the branch names on the left
         if (svg.firstChild) {
-          svg.firstChild.setAttribute(
+          (svg.firstChild as SVGElement).setAttribute(
             "transform",
             `translate(${
               BRANCH_LABEL_PADDING_X - minXBranch
@@ -377,11 +377,26 @@ function createGitgraph(
       return message;
     }
 
+    const getCallback = (
+      obj: Commit,
+      key: "onMessageClick" | "onMessageOver" | "onMessageOut",
+    ) => {
+      if (obj[key]) {
+        return () => obj[key](obj);
+      }
+      if (options && (options[key] as unknown)) {
+        return () => (options[key] as () => void)(obj);
+      }
+      return undefined;
+    };
+
     const text = createText({
       content: commit.message,
       fill: commit.style.message.color || "",
       font: commit.style.message.font,
-      onClick: commit.onMessageClick,
+      onClick: getCallback(commit, "onMessageClick"),
+      onMouseOver: getCallback(commit, "onMessageOver"),
+      onMouseOut: getCallback(commit, "onMessageOut"),
     });
 
     message = createG({

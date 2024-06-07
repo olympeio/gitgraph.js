@@ -34,6 +34,9 @@ interface GitgraphOptions {
   generateCommitHash?: () => Commit["hash"];
   compareBranchesOrder?: CompareBranchesOrder;
   generateTooltipMessage?: (commit: Commit) => string;
+  onMessageClick?: (commit: Commit) => void;
+  onMessageOver?: (commit: Commit) => void;
+  onMessageOut?: (commit: Commit) => void;
 }
 
 interface RenderedData<TNode> {
