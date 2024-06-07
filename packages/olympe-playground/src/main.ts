@@ -1,16 +1,17 @@
-import { createGitgraph, Mode } from "@gitgraph/js";
+import { createGitgraph } from "@gitgraph/js";
 import { Commit } from "@gitgraph/core";
 import template from "./template";
 
 const graphContainer = document.querySelector("#graph");
-const gitgraph = createGitgraph(graphContainer, {
+const gitgraph = createGitgraph(graphContainer as HTMLElement, {
   template,
   branchLabelOnEveryCommit: false,
   generateTooltipMessage: (commit) => {
-    const branch = commit.branches[0];
+    const branch = commit.branches?.[0];
     return (branch ? `${branch}: ` : "") + commit.subject;
   },
   onMessageOver: (commit) => {
+    console.log('here');
     const circle = document.querySelector(`[id="${commit.hash}"]`);
     circle?.setAttribute("transform-origin", "5px 5px");
     circle?.setAttribute("transform", "scale(1.5)");

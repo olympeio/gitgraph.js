@@ -377,26 +377,17 @@ function createGitgraph(
       return message;
     }
 
-    const getCallback = (
-      obj: Commit,
-      key: "onMessageClick" | "onMessageOver" | "onMessageOut",
-    ) => {
-      if (obj[key]) {
-        return () => obj[key](obj);
-      }
-      if (options && (options[key] as unknown)) {
-        return () => (options[key] as () => void)(obj);
-      }
-      return undefined;
-    };
+    const onMessageClick = commit.onMessageClick ?? options?.onMessageClick;
+    const onMessageOver = commit.onMessageOver ?? options?.onMessageOver;
+    const onMessageOut = commit.onMessageOut ?? options?.onMessageOut;
 
     const text = createText({
       content: commit.message,
       fill: commit.style.message.color || "",
       font: commit.style.message.font,
-      onClick: getCallback(commit, "onMessageClick"),
-      onMouseOver: getCallback(commit, "onMessageOver"),
-      onMouseOut: getCallback(commit, "onMessageOut"),
+      onClick: onMessageClick ? () => onMessageClick!(commit) : undefined,
+      onMouseOver: onMessageOver ? () => onMessageOver!(commit) : undefined,
+      onMouseOut: onMessageOut ? () => onMessageOut!(commit) : undefined,
     });
 
     message = createG({
@@ -576,11 +567,11 @@ function createGitgraph(
       onClick: commit.onClick,
       onMouseOver: () => {
         appendTooltipToGraph(commit);
-        commit.onMouseOver();
+        commit.onMouseOver?.();
       },
       onMouseOut: () => {
         if ($tooltip) $tooltip.remove();
-        commit.onMouseOut();
+        commit.onMouseOut?.();
       },
       children: [createDefs([circle, circleClipPath]), useCirclePath, dotText],
     });

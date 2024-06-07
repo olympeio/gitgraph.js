@@ -3,10 +3,10 @@
     "rootDir": "src",
     "outDir": "lib",
     "target": "es6",
-    "module": "commonjs",
+    "module": "es6",
     "lib": [
       "dom",
-      "esnext"
+      "es6"
     ],
     "declaration": true,
     "sourceMap": true,
@@ -16,7 +16,8 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
   },
   "files": [
     "src/index.ts"

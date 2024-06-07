@@ -22,7 +22,6 @@
     "publishConfig": {
       "access": "public"
     },
-    "main": "./index.js",
     "scripts": {
       "build": "node ./build/build.js",
       "start": "node ./build/serve.js",

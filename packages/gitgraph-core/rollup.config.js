@@ -1,7 +1,7 @@
 export default {
   input: "lib/index.js",
   output: {
-    file: "lib/bundle.umd.js",
-    format: "umd",
+    file: "lib/bundle.es6.js",
+    format: "es",
   },
 };
