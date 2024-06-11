@@ -3,23 +3,30 @@ import { Commit } from "@gitgraph/core";
 import template from "./template";
 
 const graphContainer = document.querySelector("#graph");
+
+const scaleDot = (commit: Commit<SVGElement>) => {
+  const circle = document.querySelector(`[id="${commit.hash}"]`);
+  circle?.setAttribute("r", "7");
+
+  const message = circle?.parentElement?.parentElement?.querySelector('text');
+  console.log(message);
+  message?.setAttribute('fill', '#fff');
+};
+
+const unscaleDot = (commit: Commit<SVGElement>) => {
+  const circle = document.querySelector(`[id="${commit.hash}"]`);
+  circle?.setAttribute("r", "5");
+  const message = circle?.parentElement?.parentElement?.querySelector('text');
+  message?.setAttribute('fill', '#ccc');
+};
+
 const gitgraph = createGitgraph(graphContainer as HTMLElement, {
   template,
   branchLabelOnEveryCommit: false,
-  generateTooltipMessage: (commit) => {
-    const branch = commit.branches?.[0];
-    return (branch ? `${branch}: ` : "") + commit.subject;
-  },
-  onMessageOver: (commit) => {
-    console.log('here');
-    const circle = document.querySelector(`[id="${commit.hash}"]`);
-    circle?.setAttribute("transform-origin", "5px 5px");
-    circle?.setAttribute("transform", "scale(1.5)");
-  },
-  onMessageOut: (commit) => {
-    const circle = document.querySelector(`[id="${commit.hash}"]`);
-    circle?.removeAttribute("transform");
-  },
+  onDotOver: scaleDot,
+  onDotOut: unscaleDot,
+  onMessageOver: scaleDot,
+  onMessageOut: unscaleDot,
 });
 const main = gitgraph.branch("main");
 main.commit("Initial commit");

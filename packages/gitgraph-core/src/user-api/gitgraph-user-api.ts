@@ -22,13 +22,17 @@ interface GitgraphCommitOptions<TNode> extends CommitRenderOptions<TNode> {
   subject?: string;
   body?: string;
   hash?: string;
+  hashAbbrev?: string;
   style?: TemplateOptions["commit"];
   dotText?: string;
   tag?: string;
-  onClick?: (commit: Commit<TNode>) => void;
+  generateTooltipMessage?: (commit: Commit<TNode>) => string;
+  onDotClick?: (commit: Commit<TNode>) => void;
+  onDotOver?: (commit: Commit<TNode>) => void;
+  onDotOut?: (commit: Commit<TNode>) => void;
   onMessageClick?: (commit: Commit<TNode>) => void;
-  onMouseOver?: (commit: Commit<TNode>) => void;
-  onMouseOut?: (commit: Commit<TNode>) => void;
+  onMessageOver?: (commit: Commit<TNode>) => void;
+  onMessageOut?: (commit: Commit<TNode>) => void;
 }
 
 interface GitgraphTagOptions<TNode> {

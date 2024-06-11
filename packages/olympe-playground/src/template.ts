@@ -1,7 +1,5 @@
 import { templateExtend, TemplateName } from "@gitgraph/core";
 
-console.log(TemplateName.Metro);
-
 export default templateExtend(TemplateName.Metro, {
   colors: ["#e72a4e", "#594a99", "#fcc00e", "#2cb3a0"],
   branch: {
@@ -21,12 +19,12 @@ export default templateExtend(TemplateName.Metro, {
     dot: {
       size: 5,
     },
+    ignoreTooltip: true,
     message: {
       font: "normal 12pt Roboto",
       displayAuthor: false,
-      displayBranch: false,
       displayHash: false,
-      color: "#fff",
+      color: "#ccc",
     },
   },
 });

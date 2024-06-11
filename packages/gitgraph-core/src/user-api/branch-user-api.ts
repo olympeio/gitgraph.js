@@ -293,7 +293,7 @@ class BranchUserApi<TNode> {
       parents.unshift(this._branch.parentCommitHash);
     }
 
-    const { tag, ...commitOptions } = options;
+    const { tag, generateTooltipMessage, ...commitOptions } = options;
     const commit = new Commit({
       hash: this._graph.generateCommitHash(),
       author: this._branch.commitDefaultOptions.author || this._graph.author,

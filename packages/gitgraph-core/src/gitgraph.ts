@@ -34,6 +34,9 @@ interface GitgraphOptions {
   generateCommitHash?: () => Commit["hash"];
   compareBranchesOrder?: CompareBranchesOrder;
   generateTooltipMessage?: (commit: Commit) => string;
+  onDotClick?: (commit: Commit) => void;
+  onDotOver?: (commit: Commit) => void;
+  onDotOut?: (commit: Commit) => void;
   onMessageClick?: (commit: Commit) => void;
   onMessageOver?: (commit: Commit) => void;
   onMessageOut?: (commit: Commit) => void;

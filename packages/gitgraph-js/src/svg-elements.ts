@@ -82,6 +82,7 @@ function createG(options: GOptions): SVGGElement {
 
   if (options.onClick) {
     g.addEventListener("click", options.onClick);
+    g.style.cursor = "pointer";
   }
 
   if (options.onMouseOver) {
@@ -134,6 +135,7 @@ function createText(options: TextOptions): SVGTextElement {
 
   if (options.onClick) {
     text.addEventListener("click", options.onClick);
+    text.style.cursor = "pointer";
   }
 
   if (options.onMouseOver) {

@@ -41,6 +41,7 @@
     "build": "run-s build:*",
     "build:clear": "rimraf ./lib",
     "build:tsc": "tsc",
+    "build:bundle": "rollup -c rollup.config.js",
     "prepare": "npm run build",
     "version": "auto-changelog -p -l 0 --tag-prefix @gitgraph/js@ && git add CHANGELOG.md"
   },

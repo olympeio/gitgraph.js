@@ -563,15 +563,42 @@ function createGitgraph(
         })
       : null;
 
+    const onDotClick = commit.onDotClick ?? options?.onDotClick;
+    const onDotOver = commit.onDotOver ?? options?.onDotOver;
+    const onDotOut = commit.onDotOut ?? options?.onDotOut;
+
+    // If the dot has no stroke, we don't need the "defs" trick mention above
+    // thus we prefer to display the dot directly which then prevent
+    // the mouseOut bug if the circle is "edited" during the mouseover event
+    // see: https://bugzilla.mozilla.org/show_bug.cgi?id=577785
+    if (!commit.style.dot.strokeWidth) {
+      return createG({
+        onClick: () => {
+          onDotClick?.(commit);
+        },
+        onMouseOver: () => {
+          appendTooltipToGraph(commit);
+          onDotOver?.(commit);
+        },
+        onMouseOut: () => {
+          if ($tooltip) $tooltip.remove();
+          onDotOut?.(commit);
+        },
+        children: [circle, dotText],
+      });
+    }
+
     return createG({
-      onClick: commit.onClick,
+      onClick: () => {
+        onDotClick?.(commit);
+      },
       onMouseOver: () => {
         appendTooltipToGraph(commit);
-        commit.onMouseOver?.();
+        onDotOver?.(commit);
       },
       onMouseOut: () => {
         if ($tooltip) $tooltip.remove();
-        commit.onMouseOut?.();
+        onDotOut?.(commit);
       },
       children: [createDefs([circle, circleClipPath]), useCirclePath, dotText],
     });

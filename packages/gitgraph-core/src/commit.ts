@@ -18,14 +18,15 @@ interface CommitOptions<TNode> extends CommitRenderOptions<TNode> {
   style: CommitStyle;
   body?: string;
   hash?: string;
+  hashAbbrev?: string;
   parents?: string[];
   dotText?: string;
-  onClick?: (commit: Commit<TNode>) => void;
   onMessageClick?: (commit: Commit<TNode>) => void;
   onMessageOver?: (commit: Commit<TNode>) => void;
   onMessageOut?: (commit: Commit<TNode>) => void;
-  onMouseOver?: (commit: Commit<TNode>) => void;
-  onMouseOut?: (commit: Commit<TNode>) => void;
+  onDotClick?: (commit: Commit<TNode>) => void;
+  onDotOver?: (commit: Commit<TNode>) => void;
+  onDotOut?: (commit: Commit<TNode>) => void;
 }
 
 /**
@@ -153,10 +154,6 @@ class Commit<TNode = SVGElement> {
    */
   public tags?: Array<Tag<TNode>>;
   /**
-   * Callback to execute on click.
-   */
-  public onClick: () => void;
-  /**
    * Callback to execute on click on the commit message.
    */
   public onMessageClick?: (commit: Commit<TNode>) => void;
@@ -169,13 +166,17 @@ class Commit<TNode = SVGElement> {
    */
   public onMessageOut?: (commit: Commit<TNode>) => void;
   /**
+   * Callback to execute on click on the dot.
+   */
+  public onDotClick?: (commit: Commit<TNode>) => void;
+  /**
    * Callback to execute on mouse over the dot.
    */
-  public onMouseOver?: () => void;
+  public onDotOver?: (commit: Commit<TNode>) => void;
   /**
    * Callback to execute on mouse out the dot.
    */
-  public onMouseOut?: () => void;
+  public onDotOut?: (commit: Commit<TNode>) => void;
   /**
    * Custom dot render
    */
@@ -206,7 +207,7 @@ class Commit<TNode = SVGElement> {
 
     // Set commit hash
     this.hash = options.hash || getRandomHash();
-    this.hashAbbrev = this.hash.substring(0, 7);
+    this.hashAbbrev = options.hash || this.hash.substring(0, 7);
 
     // Set parent hash
     this.parents = options.parents ? options.parents : [];
@@ -222,7 +223,7 @@ class Commit<TNode = SVGElement> {
     this.dotText = options.dotText;
 
     // Set callbacks
-    this.onClick = () => (options.onClick ? options.onClick(this) : undefined);
+    this.onDotClick = options.onDotClick ? options.onDotClick : undefined;
     this.onMessageClick = options.onMessageClick
       ? options.onMessageClick
       : undefined;
@@ -298,14 +299,15 @@ class Commit<TNode = SVGElement> {
       style: this.style,
       body: this.body,
       hash: this.hash,
+      hashAbbrev: this.hashAbbrev,
       parents: this.parents,
       dotText: this.dotText,
-      onClick: this.onClick,
       onMessageClick: this.onMessageClick,
       onMessageOver: this.onMessageOver,
       onMessageOut: this.onMessageOut,
-      onMouseOver: this.onMouseOver,
-      onMouseOut: this.onMouseOut,
+      onDotClick: this.onDotClick,
+      onDotOver: this.onDotOver,
+      onDotOut: this.onDotOut,
       renderDot: this.renderDot,
       renderMessage: this.renderMessage,
       renderTooltip: this.renderTooltip,
