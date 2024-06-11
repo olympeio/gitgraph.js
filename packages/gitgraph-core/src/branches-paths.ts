@@ -10,6 +10,8 @@ type BranchesPaths<TNode> = Map<Branch<TNode>, Coordinate[][]>;
 interface Coordinate {
   x: number;
   y: number;
+  px?: number;
+  py?: number;
 }
 
 type InternalBranchesPaths<TNode> = Map<Branch<TNode>, InternalCoordinate[]>;
@@ -108,7 +110,7 @@ class BranchesPathsCalculator<TNode> {
    *     [
    *       { x: 0, y: 640 },
    *       { x: 50, y: 560 },
-   *       { x: 50, y: 560, mergeCommit: true }
+   *       { x: 50, y: 560, mergeCommit: true, px: <parentX>, py: <parentY> }
    *     ]
    */
   private withMergeCommits() {
@@ -139,7 +141,7 @@ class BranchesPathsCalculator<TNode> {
       const lastPoints = [...(this.branchesPaths.get(branch) || [])];
       this.branchesPaths.set(branch, [
         ...lastPoints,
-        { x: mergeCommit.x, y: mergeCommit.y, mergeCommit: true },
+        { x: mergeCommit.x, y: mergeCommit.y, mergeCommit: true, px: parentOnOriginBranch.x, py: parentOnOriginBranch.y},
       ]);
     });
   }
@@ -180,6 +182,9 @@ class BranchesPathsCalculator<TNode> {
       const paths = points.reduce<Coordinate[][]>(
         (mem, point, i) => {
           if (point.mergeCommit) {
+            if (point.px && point.py) {
+              mem[mem.length - 1].push({x: point.px, y: point.py});
+            }
             mem[mem.length - 1].push(pick(point, ["x", "y"]));
             let j = i - 1;
             let previousPoint = points[j];
@@ -210,24 +215,23 @@ class BranchesPathsCalculator<TNode> {
       if (this.isGraphVertical) {
         paths.forEach((subPath) => {
           if (subPath.length <= 1) return;
-          const firstPoint = subPath[0];
-          const lastPoint = subPath[subPath.length - 1];
-          const column = subPath[1].x;
-          const branchSize =
-            Math.round(
-              Math.abs(firstPoint.y - lastPoint.y) / this.commitSpacing,
-            ) - 1;
-          const branchPoints =
-            branchSize > 0
-              ? new Array(branchSize).fill(0).map((_, i) => ({
-                  x: column,
-                  y: subPath[0].y - this.commitSpacing * (i + 1),
-                }))
-              : [];
+          const newSubPath: Coordinate[] = [];
+          let previousPoint: Coordinate|undefined = undefined;
+
+          for (const point of subPath) {
+            if (previousPoint !== undefined && previousPoint.x !== point.x && previousPoint.y - point.y > this.commitSpacing) {
+              // Changing column, add intermediate point
+              newSubPath.push({ x: point.x, y: previousPoint.y - this.commitSpacing });
+            }
+
+            newSubPath.push(point);
+            previousPoint = point;
+          }
+
           const lastSubPaths = branchesPaths.get(branch) || [];
           branchesPaths.set(branch, [
             ...lastSubPaths,
-            [firstPoint, ...branchPoints, lastPoint],
+            newSubPath,
           ]);
         });
       } else {
@@ -276,12 +280,19 @@ function toSvgPath(
         "M" +
         path
           .map(({ x, y }, i, points) => {
+            // This if only accept bezier for first and last points
             if (
               isBezier &&
-              points.length > 1 &&
-              (i === 1 || i === points.length - 1)
+              points.length > 1 &&  // only path with more than 1 point
+              i > 0                 // bezier can only apply to the second point onward
             ) {
               const previous = points[i - 1];
+              if (previous.x === x) {
+                // Same column => vertical line
+                return `L ${x} ${y}`;
+              }
+
+              // Bezier curve
               if (isVertical) {
                 const middleY = (previous.y + y) / 2;
                 return `C ${previous.x} ${middleY} ${x} ${middleY} ${x} ${y}`;

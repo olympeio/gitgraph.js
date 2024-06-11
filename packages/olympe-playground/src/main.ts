@@ -28,45 +28,56 @@ const gitgraph = createGitgraph(graphContainer as HTMLElement, {
   onMessageOver: scaleDot,
   onMessageOut: unscaleDot,
 });
-const main = gitgraph.branch("main");
-main.commit("Initial commit");
-const develop = gitgraph.branch("develop");
 
-const test = gitgraph.branch("test");
-test.commit("Initial commit");
-main.merge(test);
+const scenario = 'main';
 
-develop.commit("Initial commit");
-main.commit("Another commit");
-develop.commit("hey feature");
-main.merge(develop);
-develop.merge(main);
-const feature = gitgraph.branch("feature");
-feature.commit("Start new feature");
-feature.commit("Finish new feature");
-develop.merge(feature);
-const feature2 = gitgraph.branch("feature2");
-feature2.commit("Start new feature 2");
-feature2.commit("Finish new feature 2");
-develop.merge(feature2);
-main.commit("Hot fix");
-develop.merge(main);
-feature2.merge(develop);
-feature.merge(develop);
-feature2.commit("Adjust feature 2");
-develop.merge(feature2);
-feature.commit("Adjust feature");
-feature.commit({
-  subject: "Yet another change",
-  onMessageOver: (commit: Commit) => {
-    const circle = document.querySelector(`[id="${commit.hash}"]`);
-    circle?.setAttribute("transform-origin", "5px 5px");
-    circle?.setAttribute("transform", "scale(1.5)");
-  },
-  onMessageOut: (commit: Commit) => {
-    const circle = document.querySelector(`[id="${commit.hash}"]`);
-    circle?.removeAttribute("transform");
-  },
-});
-develop.merge(feature);
-main.merge(develop);
+if (scenario === 'main') {
+  const main = gitgraph.branch("main");
+  main.commit("Initial commit");
+  const develop = gitgraph.branch("develop");
+
+  const test = gitgraph.branch("test");
+  test.commit("Initial commit");
+  main.merge(test);
+
+  develop.commit("Initial commit");
+  main.commit({subject: "Another commit", hash: '1234567890'});
+  develop.commit("hey feature");
+  main.merge(develop);
+  develop.merge(main);
+  const feature = gitgraph.branch("feature");
+  feature.commit("Start new feature");
+  feature.commit("Finish new feature");
+  develop.merge(feature);
+  const feature2 = gitgraph.branch("feature2");
+  feature2.commit("Start new feature 2");
+  feature2.commit("Finish new feature 2");
+  develop.merge(feature2);
+  main.commit("Hot fix");
+  develop.merge(main);
+  feature2.merge(develop);
+  feature.merge(develop);
+  feature2.commit("Adjust feature 2");
+  develop.merge(feature2);
+  feature.commit("Adjust feature");
+  feature.commit({
+    subject: "Yet another change",
+  });
+  develop.merge(feature);
+  main.merge({branch: develop, commitOptions: {hash: 'merge-develop'}});
+  const feature3 = gitgraph.branch({name: "feature3", from: '1234567890'});
+  feature3.commit("Start new feature 3");
+  feature3.commit({subject: "Continue new feature 3", hash: 'xyz1234567890'});
+  feature3.commit({subject: "Test something", hash: 'test-something'});
+  main.merge({branch: feature3, from: 'xyz1234567890'});
+} else if (scenario === 'merge') {
+  const main = gitgraph.branch("main");
+  main.commit({subject: "Main Initial Commit", hash: 'main-initial-commit'}); 
+  const develop = gitgraph.branch("develop");
+  develop.commit({subject: "Develop Initial Commit", hash: 'develop-initial-commit'});
+  develop.commit({subject: "Develop Second Commit", hash: 'develop-second-commit'});
+  main.merge({branch: develop, from: 'develop-initial-commit', commitOptions: {hash: 'merge-develop'}});
+}
+
+
+

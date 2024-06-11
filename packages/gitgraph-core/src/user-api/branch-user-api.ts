@@ -21,6 +21,10 @@ interface GitgraphMergeOptions<TNode> {
    */
   fastForward?: boolean;
   /**
+   * Origin commit hash
+   */
+  from?: Commit["hash"];
+  /**
    * Commit options.
    */
   commitOptions?: GitgraphCommitOptions<TNode>;
@@ -201,9 +205,9 @@ class BranchUserApi<TNode> {
       options as GitgraphMergeOptions<TNode>;
 
     const branchName = typeof branch === "string" ? branch : branch.name;
-    const branchLastCommitHash = this._graph.refs.getCommit(branchName);
-    if (!branchLastCommitHash) {
-      throw new Error(`The branch called "${branchName}" is unknown`);
+    const fromCommitHash = options.from ?? this._graph.refs.getCommit(branchName);
+    if (!fromCommitHash) {
+      throw new Error(`Cannot find the original commit for the merge`);
     }
 
     let canFastForward = false;
@@ -212,13 +216,13 @@ class BranchUserApi<TNode> {
       if (lastCommitHash) {
         canFastForward = this._areCommitsConnected(
           lastCommitHash,
-          branchLastCommitHash,
+          fromCommitHash,
         );
       }
     }
 
     if (fastForward && canFastForward) {
-      this._fastForwardTo(branchLastCommitHash);
+      this._fastForwardTo(fromCommitHash);
     } else {
       this._commitWithParents(
         {
@@ -227,7 +231,7 @@ class BranchUserApi<TNode> {
             (commitOptions && commitOptions.subject) ||
             `Merge branch ${branchName}`,
         },
-        [branchLastCommitHash],
+        [fromCommitHash],
       );
     }
 
