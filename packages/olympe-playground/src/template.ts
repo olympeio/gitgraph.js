@@ -8,8 +8,8 @@ export default templateExtend(TemplateName.Metro, {
     label: {
       display: true,
       color: "#ccc",
-      font: "normal 12pt Roboto",
-      bgColor: "#000",
+      font: "normal 10pt Roboto",
+      bgColor: "#222",
       borderRadius: 5,
       strokeColor: "transparent",
     },

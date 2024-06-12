@@ -466,7 +466,7 @@ function createGitgraph(
       if (gitgraph.isVertical) {
         branchLabelContainer = createG({
           children: [branchLabel],
-          translate: { x: 0, y: -2 },
+          translate: { x: 0, y: -5 },
         });
       } else {
         const commitDotSize = commit.style.dot.size * 2;
