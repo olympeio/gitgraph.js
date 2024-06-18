@@ -5,19 +5,33 @@ import template from "./template";
 const graphContainer = document.querySelector("#graph");
 
 const scaleDot = (commit: Commit<SVGElement>) => {
+  const branchName = commit.branches?.[0];
+  const branchPaths = document.querySelectorAll(`#branches path`);
+  branchPaths.forEach((path) => {
+      const isHighlighted = path.getAttribute('id') === branchName;
+      path.setAttribute('stroke-width', isHighlighted ? '3' : '2');
+      path.setAttribute('style', isHighlighted ? 'opacity: 1' : 'opacity: 0.5');
+  });
   const circle = document.querySelector(`[id="${commit.hash}"]`);
   circle?.setAttribute("r", "7");
-
   const message = circle?.parentElement?.parentElement?.querySelector('text');
-  console.log(message);
   message?.setAttribute('fill', '#fff');
+  const branch = circle?.parentElement?.parentElement?.querySelector('rect+text');
+  branch?.setAttribute('fill', '#fff');
 };
 
 const unscaleDot = (commit: Commit<SVGElement>) => {
+  const branchPaths = document.querySelectorAll(`#branches path`);
+            branchPaths.forEach((path) => {
+                path.setAttribute('stroke-width', '2');
+                path.setAttribute('style','opacity: 1');
+            });
   const circle = document.querySelector(`[id="${commit.hash}"]`);
   circle?.setAttribute("r", "5");
   const message = circle?.parentElement?.parentElement?.querySelector('text');
   message?.setAttribute('fill', '#ccc');
+  const branch = circle?.parentElement?.parentElement?.querySelector('rect+text');
+  branch?.setAttribute('fill', '#ccc');
 };
 
 const gitgraph = createGitgraph(graphContainer as HTMLElement, {
@@ -29,7 +43,7 @@ const gitgraph = createGitgraph(graphContainer as HTMLElement, {
   onMessageOut: unscaleDot,
 });
 
-const scenario = 'main';
+const scenario = 'test';
 
 if (scenario === 'main') {
   const main = gitgraph.branch("main");
@@ -70,6 +84,7 @@ if (scenario === 'main') {
   feature3.commit({subject: "Continue new feature 3", hash: 'xyz1234567890'});
   feature3.commit({subject: "Test something", hash: 'test-something'});
   main.merge({branch: feature3, from: 'xyz1234567890'});
+  feature3.delete();
 } else if (scenario === 'merge') {
   const main = gitgraph.branch("main");
   main.commit({subject: "Main Initial Commit", hash: 'main-initial-commit'}); 
@@ -77,6 +92,16 @@ if (scenario === 'main') {
   develop.commit({subject: "Develop Initial Commit", hash: 'develop-initial-commit'});
   develop.commit({subject: "Develop Second Commit", hash: 'develop-second-commit'});
   main.merge({branch: develop, from: 'develop-initial-commit', commitOptions: {hash: 'merge-develop'}});
+} else if (scenario === 'test') {
+  const main = gitgraph.branch("main");
+  main.commit({subject: "init", hash: 'ebe'});
+  main.commit({subject: "f1", hash: '1b9'});
+  const dev = gitgraph.branch({name: 'dev', from: '1b9'});
+  dev.commit({subject: "f2", hash: '5b5'});
+  dev.commit({subject: "f3", hash: '0b3'});
+  dev.commit({subject: "head", hash: 'adf'});
+  main.merge({branch: dev, from: '0b3', commitOptions: {hash: '245'}});
+  main.commit({subject: "head", hash: 'f2f'});
 }
 
 
