@@ -182,7 +182,7 @@ class BranchesPathsCalculator<TNode> {
       const paths = points.reduce<Coordinate[][]>(
         (mem, point, i) => {
           if (point.mergeCommit) {
-            if (point.px && point.py) {
+            if (point.px !== undefined && point.py !== undefined) {
               mem[mem.length - 1].push({x: point.px, y: point.py});
             }
             mem[mem.length - 1].push(pick(point, ["x", "y"]));

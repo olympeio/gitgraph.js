@@ -286,6 +286,7 @@ function createGitgraph(
 
     const paths = Array.from(branchesPaths).map(([branch, coordinates]) => {
       return createPath({
+        id: branch.name,
         d: toSvgPath(
           coordinates.map((coordinate) => coordinate.map(getWithCommitOffset)),
           isBezier,
@@ -301,7 +302,7 @@ function createGitgraph(
       });
     });
 
-    return createG({ children: paths });
+    return createG({ children: paths, id: "branches"});
   }
 
   function renderCommits(commits: Commit[]): SVGGElement {

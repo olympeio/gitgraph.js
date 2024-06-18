@@ -52,6 +52,7 @@ interface GOptions {
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
+  id?: string;
   onClick?: () => void;
   onMouseOver?: () => void;
   onMouseOut?: () => void;
@@ -91,6 +92,10 @@ function createG(options: GOptions): SVGGElement {
 
   if (options.onMouseOut) {
     g.addEventListener("mouseout", options.onMouseOut);
+  }
+
+  if (options.id) {
+    g.setAttribute("id", options.id);
   }
 
   return g;
@@ -209,6 +214,7 @@ interface PathOptions {
     x: number;
     y: number;
   };
+  id?: string;
 }
 
 function createPath(options: PathOptions): SVGPathElement {
@@ -232,6 +238,10 @@ function createPath(options: PathOptions): SVGPathElement {
       "transform",
       `translate(${options.translate.x}, ${options.translate.y})`,
     );
+  }
+
+  if (options.id) {
+    path.setAttribute("id", options.id);
   }
 
   return path;
