@@ -63,7 +63,7 @@ interface CommitYWithOffsets {
 
 function createGitgraph(
   graphContainer: HTMLElement,
-  options?: GitgraphOptions & { responsive?: boolean },
+  options?: GitgraphOptions & { responsive?: boolean, branchNameMaxLength?: number, commitMessageMaxLength?: number},
 ) {
   let commitsElements: {
     [commitHash: string]: {
@@ -320,7 +320,7 @@ function createGitgraph(
           createG({
             translate: { x: -x, y: 0 },
             children: [
-              renderMessage(commit),
+              renderMessage(commit, options?.commitMessageMaxLength),
               ...renderBranchLabels(commit),
               ...renderTags(commit),
             ],
@@ -358,7 +358,7 @@ function createGitgraph(
     }
   }
 
-  function renderMessage(commit: Commit): SVGElement | null {
+  function renderMessage(commit: Commit, maxLength?: number): SVGElement | null {
     if (!commit.style.message.display) {
       return null;
     }
@@ -389,6 +389,7 @@ function createGitgraph(
       onClick: onMessageClick ? () => onMessageClick!(commit) : undefined,
       onMouseOver: onMessageOver ? () => onMessageOver!(commit) : undefined,
       onMouseOut: onMessageOut ? () => onMessageOut!(commit) : undefined,
+      maxLength,
     });
 
     message = createG({
@@ -461,7 +462,7 @@ function createGitgraph(
 
       const branchLabel = branch.renderLabel
         ? branch.renderLabel(branch)
-        : createBranchLabel(branch, commit);
+        : createBranchLabel(branch, commit, options?.branchNameMaxLength);
 
       let branchLabelContainer;
       if (gitgraph.isVertical) {

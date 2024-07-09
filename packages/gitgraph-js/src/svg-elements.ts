@@ -113,13 +113,15 @@ interface TextOptions {
   onClick?: () => void;
   onMouseOver?: () => void;
   onMouseOut?: () => void;
+  maxLength?: number;
 }
 
 function createText(options: TextOptions): SVGTextElement {
   const text = document.createElementNS(SVG_NAMESPACE, "text");
   text.setAttribute("alignment-baseline", "central");
   text.setAttribute("dominant-baseline", "central");
-  text.textContent = options.content;
+  const content = options.content.length > (options.maxLength || Infinity) ? `${options.content.slice(0, (options.maxLength! - 3))}...` : options.content;
+  text.textContent = content;
 
   if (options.fill) {
     text.setAttribute("fill", options.fill);

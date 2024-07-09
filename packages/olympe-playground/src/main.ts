@@ -41,9 +41,11 @@ const gitgraph = createGitgraph(graphContainer as HTMLElement, {
   onDotOut: unscaleDot,
   onMessageOver: scaleDot,
   onMessageOut: unscaleDot,
+  branchNameMaxLength: 20,
+  commitMessageMaxLength: 20,
 });
 
-const scenario = 'test';
+const scenario = 'main';
 
 if (scenario === 'main') {
   const main = gitgraph.branch("main");
@@ -63,9 +65,9 @@ if (scenario === 'main') {
   feature.commit("Start new feature");
   feature.commit("Finish new feature");
   develop.merge(feature);
-  const feature2 = gitgraph.branch("feature2");
+  const feature2 = gitgraph.branch("feature2 with a very long name that should be truncated");
   feature2.commit("Start new feature 2");
-  feature2.commit("Finish new feature 2");
+  feature2.commit("Finish new feature 2 with a very long message that should be truncated");
   develop.merge(feature2);
   main.commit("Hot fix");
   develop.merge(main);

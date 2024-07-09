@@ -6,7 +6,7 @@ export { createBranchLabel, PADDING_X, PADDING_Y };
 const PADDING_X = 5;
 const PADDING_Y = 2;
 
-function createBranchLabel(branch: Branch, commit: Commit): SVGElement {
+function createBranchLabel(branch: Branch, commit: Commit, branchNameMaxLength?: number): SVGElement {
   const rect = createRect({
     width: 0,
     height: 0,
@@ -22,6 +22,7 @@ function createBranchLabel(branch: Branch, commit: Commit): SVGElement {
     },
     font: branch.style.label.font,
     fill: branch.style.label.color || commit.style.color,
+    maxLength: branchNameMaxLength
   });
 
   const branchLabel = createG({ children: [rect] });
